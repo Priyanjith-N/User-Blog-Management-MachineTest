@@ -1,8 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+
+// services
+import { AuthService } from '../../../core/services/auth.service';
+
+// interfaces
 import { IRegisterForm } from '../../models/IFormGroup';
 import { IUserRegisterationCredentials } from '../../models/IAuthCredentials';
+import { IRegisterSucessfullAPIResponse } from '../../models/IAuthAPISucessResponse';
+import { IValidationError } from '../../models/IAPIError';
 
 @Component({
   selector: 'app-register-form',
@@ -15,6 +23,9 @@ import { IUserRegisterationCredentials } from '../../models/IAuthCredentials';
   styleUrl: './register-form.component.css'
 })
 export class RegisterFormComponent {
+  private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
+
   registerForm: FormGroup<IRegisterForm>;
   isFormSubmited: boolean = false;
 
@@ -67,6 +78,27 @@ export class RegisterFormComponent {
       confirmPassword: this.registerForm.value.confirmPassword!
     }
 
-    console.log(registerCredentials);
+    const registerApiResponse$: Observable<IRegisterSucessfullAPIResponse> = this.authService.handelRegister(registerCredentials);
+
+    registerApiResponse$.subscribe({
+      next: (res) => {
+        this.isFormSubmited = false;
+
+        this.router.navigate(["/"]);
+      },
+      error: (err) => {
+        this.isFormSubmited = false;
+
+        if(!err.errorField) return;
+
+        const errObj: IValidationError = err as IValidationError;
+
+        this.registerForm.get(errObj.errorField)?.setErrors({ message: errObj.message });
+
+        this.registerForm.markAllAsTouched();
+
+        console.error(errObj.errorCode);
+      }
+    });
   }
 }
