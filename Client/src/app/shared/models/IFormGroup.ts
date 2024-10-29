@@ -8,7 +8,6 @@ export interface ILoginForm {
 export interface IRegisterForm {
     userName: FormControl<string | null>;
     email: FormControl<string | null>;
-    phoneNumber: FormControl<string | null>;
     password: FormControl<string | null>;
     confirmPassword: FormControl<string | null>;
 }

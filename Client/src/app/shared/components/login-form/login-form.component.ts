@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ILoginForm } from '../../models/IFormGroup';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { IUserLoginCredentials } from '../../models/IAuthCredentials';
 
 @Component({
   selector: 'app-login-form',
@@ -44,5 +45,12 @@ export class LoginFormComponent {
     if(this.isFormSubmited || this.loginForm.invalid) return this.loginForm.markAllAsTouched();
 
     this.isFormSubmited = true;
+
+    const loginCredentials: IUserLoginCredentials = {
+      email: this.loginForm.value.email!,
+      password: this.loginForm.value.password!
+    }
+
+    console.log(loginCredentials);    
   }
 }
