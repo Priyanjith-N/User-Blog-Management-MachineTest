@@ -41,7 +41,7 @@
                                 <p class="font-medium text-[14px]" [class.error]="registerForm.get('password')?.errors  && registerForm.get('password')!.touched || registerForm.get('confirmPassword')?.errors  && registerForm.get('confirmPassword')!.touched" >Password</p>
                             </label>
                             <div class="relative mt-[8px]">
-                                <input formControlName="password" id="password" type="text" placeholder="Enter your password" class="placeholder:text-[#96A0AD] placeholder:text-[16px] py-[12px] pl-[18px] border border-solid border-[#BDC4CD] rounded-[12px] outline-none w-full" [class.error]="registerForm.get('password')?.errors  && registerForm.get('password')!.touched || registerForm.get('confirmPassword')?.errors  && registerForm.get('confirmPassword')!.touched">
+                                <input formControlName="password" id="password" type="password" placeholder="Enter your password" class="placeholder:text-[#96A0AD] placeholder:text-[16px] py-[12px] pl-[18px] border border-solid border-[#BDC4CD] rounded-[12px] outline-none w-full" [class.error]="registerForm.get('password')?.errors  && registerForm.get('password')!.touched || registerForm.get('confirmPassword')?.errors  && registerForm.get('confirmPassword')!.touched">
                                 @if(registerForm.get('password')!.hasError('required')  && registerForm.get('password')!.touched){
                                     <p class="text-[13px] text-[#FF6B6B] absolute -bottom-[23px]">This Field is required.</p>
                                 }@else if (registerForm.get('password')!.errors  && registerForm.get('password')!.touched) {
@@ -54,7 +54,7 @@
                                 <p class="font-medium text-[14px]" [class.error]="registerForm.get('confirmPassword')?.errors  && registerForm.get('confirmPassword')!.touched || registerForm.get('password')?.errors  && registerForm.get('password')!.touched" >Confirm password</p>
                             </label>
                             <div class="relative mt-[8px]">
-                                <input formControlName="confirmPassword" id="confirmpassword" type="text" placeholder="Enter your confirmpassword" class="placeholder:text-[#96A0AD] placeholder:text-[16px] py-[12px] pl-[18px] border border-solid border-[#BDC4CD] rounded-[12px] outline-none w-full" [class.error]="registerForm.get('confirmPassword')?.errors  && registerForm.get('confirmPassword')!.touched || registerForm.get('password')?.errors  && registerForm.get('password')!.touched">
+                                <input formControlName="confirmPassword" id="confirmpassword" type="password" placeholder="Enter your confirmpassword" class="placeholder:text-[#96A0AD] placeholder:text-[16px] py-[12px] pl-[18px] border border-solid border-[#BDC4CD] rounded-[12px] outline-none w-full" [class.error]="registerForm.get('confirmPassword')?.errors  && registerForm.get('confirmPassword')!.touched || registerForm.get('password')?.errors  && registerForm.get('password')!.touched">
                                 @if(registerForm.get('confirmPassword')!.hasError('required')  && registerForm.get('confirmPassword')!.touched){
                                     <p class="text-[13px] text-[#FF6B6B] absolute -bottom-[23px]">This Field is required.</p>
                                 }@else if (registerForm.get('confirmPassword')!.errors  && registerForm.get('confirmPassword')!.touched) {

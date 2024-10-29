@@ -1,8 +1,16 @@
-import { Component } from '@angular/core';
-import { ILoginForm } from '../../models/IFormGroup';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+
+// services
+import { AuthService } from '../../../core/services/auth.service';
+
+// interfaces
+import { ILoginForm } from '../../models/IFormGroup';
 import { IUserLoginCredentials } from '../../models/IAuthCredentials';
+import { ILoginSucessfullAPIResponse } from '../../models/IAuthAPISucessResponse';
+import { IValidationError } from '../../models/IAPIError';
 
 @Component({
   selector: 'app-login-form',
@@ -15,6 +23,9 @@ import { IUserLoginCredentials } from '../../models/IAuthCredentials';
   styleUrl: './login-form.component.css'
 })
 export class LoginFormComponent {
+  private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
+
   loginForm: FormGroup<ILoginForm>;
   isFormSubmited: boolean = false;
 
@@ -51,6 +62,27 @@ export class LoginFormComponent {
       password: this.loginForm.value.password!
     }
 
-    console.log(loginCredentials);    
+    const loginApiResponse$: Observable<ILoginSucessfullAPIResponse> = this.authService.handelLogin(loginCredentials);
+
+    loginApiResponse$.subscribe({
+      next: (res) => {
+       this.isFormSubmited = false;
+
+       this.router.navigate(["/"]);
+      },
+      error: (err) => {
+        this.isFormSubmited = false;
+
+        if(!err.errorField) return;
+
+        const errObj: IValidationError = err as IValidationError;
+
+        this.loginForm.get(errObj.errorField)?.setErrors({ message: errObj.message });
+
+        this.loginForm.markAllAsTouched();
+
+        console.error(errObj.errorCode);
+      }
+    });
   }
 }

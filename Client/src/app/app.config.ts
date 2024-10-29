@@ -4,12 +4,14 @@ import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angu
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { errorHandlingInterceptor } from './core/interceptors/error-handling.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes, withViewTransitions(), withInMemoryScrolling({ scrollPositionRestoration: "top" })),
     provideAnimations(),
-    provideHttpClient(withInterceptors([]))
+    provideHttpClient(withInterceptors([authInterceptor, errorHandlingInterceptor]))
   ]
 };
