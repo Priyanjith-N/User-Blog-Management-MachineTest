@@ -40,10 +40,10 @@ export default class AuthUseCase implements IAuthUseCase {
 
             const userData: IUser | null = await this.authRepository.isUserExist(data.email, data.userName);
 
-            if(userData && userData.email === data.email) {
-                throw new ValidationError({ statusCode: StatusCodes.BadRequest, errorField: ErrorField.EMAIL, message: ErrorMessage.EMAIL_ALREADY_TAKEN, errorCode: ErrorCode.EMAIL_TAKEN });
-            }else if (userData && userData.userName === data.userName) {
+            if (userData && userData.userName === data.userName) {
                 throw new ValidationError({ statusCode: StatusCodes.BadRequest, errorField: ErrorField.USERNAME, message: ErrorMessage.USERNAME_ALREADY_TAKEN, errorCode: ErrorCode.USERNAME_TAKEN });
+            }else if(userData && userData.email === data.email) {
+                throw new ValidationError({ statusCode: StatusCodes.BadRequest, errorField: ErrorField.EMAIL, message: ErrorMessage.EMAIL_ALREADY_TAKEN, errorCode: ErrorCode.EMAIL_TAKEN });
             }
 
             const newUserData: Omit<IUser, "_id"> = {
