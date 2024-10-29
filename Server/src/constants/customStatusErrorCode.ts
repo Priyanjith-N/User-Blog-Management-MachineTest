@@ -4,4 +4,6 @@ export const ErrorCode = Object.freeze({
     PASSWORD_INVAILD: "400x2 both password and confirm password didn't match",
     EMAIL_TAKEN: "400x3 email is in use",
     USERNAME_TAKEN: "400x4 username is in use",
+    USER_NOT_FOUND: "404x2 user with that email not found",
+    PASSWORD_INCORRECT: "400x5 password incorrect",
 });

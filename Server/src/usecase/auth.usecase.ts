@@ -11,7 +11,7 @@ import { ErrorField } from "../constants/errorField";
 import { StatusCodes } from "../enums/statusCode.enum";
 
 // interfaces
-import IUser, { IUserRegisterationCredentials } from "../entity/user.entity";
+import IUser, { IUserLoginCredentials, IUserRegisterationCredentials } from "../entity/user.entity";
 import IAuthUseCase from "../interface/usecase/IAuth.usecase.interface";
 import IAuthRepository from "../interface/repositories/IAuth.repository.interface";
 import IHashingService from "../interface/utils/IHashingService";
@@ -56,6 +56,34 @@ export default class AuthUseCase implements IAuthUseCase {
 
             const payload: IPayload = {
                 id: newData._id
+            }
+
+            const token: string = this.JWTService.sign(payload, "1d");
+
+            return token;
+        } catch (err: any) {
+            throw err;
+        }
+    }
+
+    async handelUserLogin(userLoginCredentials: IUserLoginCredentials): Promise<string | never> {
+        try {
+            if(!userLoginCredentials.email || !userLoginCredentials.password) throw new RequiredCredentialsNotGiven(ErrorMessage.REQUIRED_CREDENTIALS_NOT_GIVEN, ErrorCode.CREDENTIALS_NOT_GIVEN_OR_NOT_FOUND);
+
+            if(!(/^[A-Za-z0-9]+@gmail\.com$/).test(userLoginCredentials.email)) {
+                throw new ValidationError({ statusCode: StatusCodes.BadRequest, errorField: ErrorField.EMAIL, message: ErrorMessage.EMAIL_NOT_VAILD, errorCode: ErrorCode.PROVIDE_VAILD_EMAIL });
+            }
+
+            const userData: IUser | null = await this.authRepository.getUserDataByEmail(userLoginCredentials.email);
+
+            if(!userData) {
+                throw new ValidationError({ errorField: ErrorField.EMAIL, message: ErrorMessage.USER_NOT_FOUND, statusCode: StatusCodes.NotFound, errorCode: ErrorCode.USER_NOT_FOUND });
+            }else if(!await this.hashingService.compare(userLoginCredentials.password, userData.password)) {
+                throw new ValidationError({ errorField: ErrorField.PASSWORD, message: ErrorMessage.PASSWORD_INCORRECT, statusCode: StatusCodes.BadRequest, errorCode: ErrorCode.PASSWORD_INCORRECT });
+            }
+
+            const payload: IPayload = {
+                id: userData._id
             }
 
             const token: string = this.JWTService.sign(payload, "1d");
