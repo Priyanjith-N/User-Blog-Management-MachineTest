@@ -9,4 +9,6 @@ export const ErrorCode = Object.freeze({
     TOKEN_NOT_FOUND: "404x3 token not found not AUTHENTICATED",
     TOKEN_PAYLOAD_NOT_VALID: "400x6 token payload not vaild",
     TOKEN_EXPIRED_NEW_TOKEN_NEEDED: "401x1 token expired new token needed",
+    MIN_TITLE_NOT_MEET: "400x7 title minimum length does not meet",
+    MIN_CONTENT_NOT_MEET: "400x8 content minimum length does not meet",
 });

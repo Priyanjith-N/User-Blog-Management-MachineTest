@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 // interfaces
-import IUser from "../../entity/user.entity";
+import IUser from "../../entity/IUser.entity";
 
 const userSchema: Schema = new Schema<IUser>({
     userName: {

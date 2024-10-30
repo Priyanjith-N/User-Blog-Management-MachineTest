@@ -4,8 +4,9 @@ import cookieParser from 'cookie-parser';
 import morgan from "morgan";
 import errorHandlerMiddleware from "../middleware/error.middleware";
 
-// auth router
+// routers
 import authRouter from "../router/auth.router";
+import blogRouter from "../router/blog.router";
 
 const app: Express = express();
 
@@ -25,6 +26,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev")); // Loging all http requests in detail
 
 app.use("/auth", authRouter); // auth router
+
+app.use("/api", blogRouter); // blog router
 
 app.use(errorHandlerMiddleware); // error Handling Midlleware
 

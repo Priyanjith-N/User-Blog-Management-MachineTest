@@ -8,7 +8,7 @@ import { ResponseMessage } from "../../constants/sucessMessage";
 
 // interfaces
 import IAuthController from "../../interface/controllers/IAuth.controller.interface";
-import { IUserLoginCredentials, IUserRegisterationCredentials } from "../../entity/user.entity";
+import { IUserLoginCredentials, IUserRegisterationCredentials } from "../../entity/IUser.entity";
 import IAuthUseCase from "../../interface/usecase/IAuth.usecase.interface";
 
 export default class AuthController implements IAuthController {

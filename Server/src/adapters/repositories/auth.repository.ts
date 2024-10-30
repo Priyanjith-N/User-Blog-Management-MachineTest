@@ -3,7 +3,7 @@ import Users from "../../framework/models/user.model";
 
 // interfaces
 import IAuthRepository from "../../interface/repositories/IAuth.repository.interface";
-import IUser from "../../entity/user.entity";
+import IUser from "../../entity/IUser.entity";
 
 export default class AuthRepository implements IAuthRepository {
     async isUserExist(email: string, userName: string): Promise<IUser | null | never> {

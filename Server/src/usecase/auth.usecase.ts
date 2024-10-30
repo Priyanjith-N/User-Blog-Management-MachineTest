@@ -14,7 +14,7 @@ import { ErrorField } from "../constants/errorField";
 import { StatusCodes } from "../enums/statusCode.enum";
 
 // interfaces
-import IUser, { IUserLoginCredentials, IUserRegisterationCredentials } from "../entity/user.entity";
+import IUser, { IUserLoginCredentials, IUserRegisterationCredentials } from "../entity/IUser.entity";
 import IAuthUseCase from "../interface/usecase/IAuth.usecase.interface";
 import IAuthRepository from "../interface/repositories/IAuth.repository.interface";
 import IHashingService from "../interface/utils/IHashingService";
