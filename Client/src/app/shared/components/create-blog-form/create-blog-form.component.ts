@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
+// interfaces
+import { IBlogForm } from '../../models/IFormGroup';
+import { IBlogCredentials } from '../../models/IBlog.entity';
 
 @Component({
   selector: 'app-create-blog-form',
@@ -10,7 +14,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
   styleUrl: './create-blog-form.component.css'
 })
 export class CreateBlogFormComponent {
-  blogForm: FormGroup;
+  blogForm: FormGroup<IBlogForm>;
   previewUrl: string | null = null;
   isDragging = false;
   isSubmitting = false;
@@ -28,20 +32,13 @@ export class CreateBlogFormComponent {
     'Science'
   ];
 
-  constructor(private fb: FormBuilder) {
-    this.blogForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(5)]],
-      category: ['', Validators.required],
-      content: ['', [Validators.required, Validators.minLength(50)]],
-      image: [null]
+  constructor() {
+    this.blogForm = new FormGroup<IBlogForm>({
+      title: new FormControl("", [Validators.required, Validators.minLength(5)]),
+      category: new FormControl("", [Validators.required]),
+      content: new FormControl("", [Validators.required, Validators.minLength(50)]),
+      image: new FormControl(null)
     });
-  }
-
-  ngOnInit(): void {}
-
-  isFieldInvalid(fieldName: string): boolean {
-    const field = this.blogForm.get(fieldName);
-    return field ? field.invalid && (field.dirty || field.touched) : false;
   }
 
   onFileSelected(event: any): void {
@@ -73,6 +70,8 @@ export class CreateBlogFormComponent {
   }
 
   handleFile(file: File): void {
+    this.blogForm.get("image")?.setErrors(null);
+
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -80,6 +79,8 @@ export class CreateBlogFormComponent {
         this.blogForm.patchValue({ image: file });
       };
       reader.readAsDataURL(file);
+    }else {
+      this.blogForm.get("image")?.setErrors({ message: "Provide a vaild image file" });
     }
   }
 
@@ -104,41 +105,46 @@ export class CreateBlogFormComponent {
     return content.trim().split(/\s+/).filter(Boolean).length;
   }
 
-  async onSubmit(): Promise<void> {
-    if (this.blogForm.valid) {
-      this.isSubmitting = true;
-      
-      // Simulate API call
-      try {
-        const formData = {
-          ...this.blogForm.value,
-          tags: this.tags
-        };
-        
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        console.log('Form submitted:', formData);
-        
-        // Reset form
-        this.blogForm.reset();
-        this.tags = [];
-        this.previewUrl = null;
-        this.isSubmitting = false;
-        
-        // Show success message (you can implement your own notification system)
-        alert('Blog post created successfully!');
-      } catch (error) {
-        console.error('Error submitting form:', error);
-        this.isSubmitting = false;
-        alert('An error occurred while creating the blog post.');
-      }
-    } else {
-      // Mark all fields as touched to trigger validation messages
-      Object.keys(this.blogForm.controls).forEach(key => {
-        const control = this.blogForm.get(key);
-        control?.markAsTouched();
-      });
+  private isImageVaild() {
+    this.blogForm.get("image")?.setErrors(null);
+
+    const { image } = this.blogForm.value;
+
+    if(!image) {
+      this.blogForm.get("image")?.setErrors({ message: "This Field is required" });
     }
+  }
+
+  async onSubmit(): Promise<void> {
+    this.isImageVaild();
+
+    if(this.blogForm.invalid || this.isSubmitting) return this.blogForm.markAllAsTouched();
+
+      this.isSubmitting = true;
+
+      const blogCredentials: IBlogCredentials = {
+        title: this.blogForm.value.title!,
+        category: this.blogForm.value.category!,
+        content: this.blogForm.value.content!,
+        image: this.blogForm.value.image!,
+        tags: this.tags
+      };
+
+      const formData: FormData = new FormData();
+
+      formData.append("title", blogCredentials.title);
+      formData.append("category", blogCredentials.category);
+      formData.append("content", blogCredentials.content);
+      formData.append("image", blogCredentials.image, blogCredentials.image.name);
+      formData.append("tags", JSON.stringify(blogCredentials.tags));
+      
+      console.log('Form submitted:', formData);
+      console.log(blogCredentials);
+      
+      // Reset form
+      this.blogForm.reset();
+      this.tags = [];
+      this.previewUrl = null;
+      this.isSubmitting = false;
   }
 }

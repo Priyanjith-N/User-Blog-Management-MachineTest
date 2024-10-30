@@ -11,3 +11,10 @@ export interface IRegisterForm {
     password: FormControl<string | null>;
     confirmPassword: FormControl<string | null>;
 }
+
+export interface IBlogForm {
+    title: FormControl<string | null>;
+    category: FormControl<string | null>;
+    content: FormControl<string | null>;
+    image: FormControl<File | null>;
+}

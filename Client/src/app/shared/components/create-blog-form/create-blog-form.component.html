@@ -16,7 +16,7 @@
           
           <!-- Title Section -->
           <div class="space-y-2">
-            <label for="title" class="text-sm font-medium text-gray-700">
+            <label for="title" class="text-sm font-medium text-gray-700" [class.error]="blogForm.get('title')?.errors  && blogForm.get('title')!.touched">
               Title
             </label>
             <input
@@ -24,41 +24,46 @@
               type="text"
               formControlName="title"
               class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm transition duration-150 outline-none"
+              [class.error]="blogForm.get('title')?.errors  && blogForm.get('title')!.touched"
               placeholder="Enter a captivating title..."
             >
-            <div *ngIf="isFieldInvalid('title')" class="text-red-500 text-sm mt-1">
-              Title is required and must be at least 5 characters
-            </div>
+            @if(blogForm.get('title')!.hasError('required')  && blogForm.get('title')!.touched) {
+                <p class="text-[#FF6B6B] text-sm mt-1">This Field is required</p>
+            }@else if(blogForm.get('title')!.hasError('minlength')  && blogForm.get('title')!.touched) {
+                <p class="text-[#FF6B6B] text-sm mt-1">Title is required and must be at least 5 characters</p>
+            }
           </div>
 
           <!-- Category Section -->
           <div class="space-y-2">
-            <label for="category" class="text-sm font-medium text-gray-700">
+            <label for="category" class="text-sm font-medium text-gray-700" [class.error]="blogForm.get('category')?.errors  && blogForm.get('category')!.touched">
               Category
             </label>
             <select
               id="category"
               formControlName="category"
               class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm outline-none"
+              [class.error]="blogForm.get('category')?.errors  && blogForm.get('category')!.touched"
             >
               <option value="" hidden>Select a category</option>
-              <option *ngFor="let category of categories" [value]="category">
+              <option class="text-black" *ngFor="let category of categories" [value]="category">
                 {{category}}
               </option>
             </select>
-            <div *ngIf="isFieldInvalid('category')" class="text-red-500 text-sm mt-1">
-              Please select a category
-            </div>
+            @if(blogForm.get('category')!.hasError('required')  && blogForm.get('category')!.touched) {
+                <p class="text-[#FF6B6B] text-sm mt-1">Please select a category</p>
+            }
           </div>
 
           <!-- Image Upload Section -->
           <div class="space-y-2">
-            <label class="text-sm font-medium text-gray-700">
+            <label class="text-sm font-medium text-gray-700" [class.error]="blogForm.get('image')?.errors  && blogForm.get('image')!.touched">
               Cover Image
             </label>
             <div
               class="relative border-2 border-dashed rounded-lg p-6"
               [ngClass]="{'border-purple-500 bg-purple-50': isDragging}"
+              [class.error]="blogForm.get('image')?.errors  && blogForm.get('image')!.touched"
               (dragover)="onDragOver($event)"
               (dragleave)="onDragLeave($event)"
               (drop)="onDrop($event)"
@@ -91,11 +96,14 @@
                 </button>
               </div>
             </div>
+            @if(blogForm.get('image')!.errors  && blogForm.get('image')!.touched) {
+                <p class="text-[#FF6B6B] text-sm mt-1">{{ blogForm.get('image')?.errors?.['message'] }}</p>
+            }
           </div>
 
           <!-- Content Section -->
           <div class="space-y-2">
-            <label for="content" class="text-sm font-medium text-gray-700">
+            <label for="content" class="text-sm font-medium text-gray-700" [class.error]="blogForm.get('content')?.errors  && blogForm.get('content')!.touched">
               Content
             </label>
             <div class="relative">
@@ -104,16 +112,18 @@
                 formControlName="content"
                 rows="8"
                 class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm transition duration-150 resize-none outline-none"
-                [ngClass]="{'border-red-500': isFieldInvalid('content')}"
+                [class.error]="blogForm.get('content')?.errors  && blogForm.get('content')!.touched"
                 placeholder="Write your story here..."
               ></textarea>
               <div class="absolute bottom-3 right-3 text-sm text-gray-500">
                 {{ getWordCount() }} words
               </div>
             </div>
-            <div *ngIf="isFieldInvalid('content')" class="text-red-500 text-sm mt-1">
-              Content must be at least 50 words
-            </div>
+            @if(blogForm.get('content')!.hasError('required')  && blogForm.get('content')!.touched) {
+                <p class="text-[#FF6B6B] text-sm mt-1">This Field is required</p>
+            }@else if(blogForm.get('content')!.hasError('minlength')  && blogForm.get('title')!.touched) {
+                <p class="text-[#FF6B6B] text-sm mt-1">Content must be at least 50 characters</p>
+            }
           </div>
 
           <!-- Tags Section -->
@@ -142,7 +152,7 @@
                 <button
                     (click)="addTag()"
                     type="button"
-                    class="px-4 py-1 bg-purple-600 text-white rounded-full hover:bg-purple-700"
+                    class="px-4 py-1 bg-slate-800 text-white rounded-full hover:bg-slate-600"
                   >
                     Add
                 </button>
@@ -153,9 +163,7 @@
           <div class="pt-4">
             <button
               type="submit"
-              [disabled]="blogForm.invalid || isSubmitting"
               class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold bg-black text-white transition duration-150"
-              [ngClass]="{'opacity-75 cursor-not-allowed': blogForm.invalid || isSubmitting}"
             >
               <span *ngIf="!isSubmitting">Publish Post</span>
               <span *ngIf="isSubmitting" class="flex items-center">
