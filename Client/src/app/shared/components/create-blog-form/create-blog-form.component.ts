@@ -1,19 +1,33 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+
+// services
+import { BlogService } from '../../../core/services/blog.service';
 
 // interfaces
 import { IBlogForm } from '../../models/IFormGroup';
 import { IBlogCredentials } from '../../models/IBlog.entity';
+import { ICreateBlogSucessfullAPIResponse } from '../../models/IBlogAPISucessResponse';
+import { IValidationError } from '../../models/IAPIError';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-blog-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule
+  ],
   templateUrl: './create-blog-form.component.html',
   styleUrl: './create-blog-form.component.css'
 })
 export class CreateBlogFormComponent {
+  private blogService: BlogService = inject(BlogService);
+  private router: Router = inject(Router);
+
   blogForm: FormGroup<IBlogForm>;
   previewUrl: string | null = null;
   isDragging = false;
@@ -89,7 +103,9 @@ export class CreateBlogFormComponent {
     this.blogForm.patchValue({ image: null });
   }
 
-  addTag(): void {
+  addTag(event: Event): void {
+    event.preventDefault();
+
     if (this.newTag.trim() && !this.tags.includes(this.newTag.trim())) {
       this.tags.push(this.newTag.trim());
       this.newTag = '';
@@ -138,13 +154,28 @@ export class CreateBlogFormComponent {
       formData.append("image", blogCredentials.image, blogCredentials.image.name);
       formData.append("tags", JSON.stringify(blogCredentials.tags));
       
-      console.log('Form submitted:', formData);
-      console.log(blogCredentials);
-      
-      // Reset form
-      this.blogForm.reset();
-      this.tags = [];
-      this.previewUrl = null;
-      this.isSubmitting = false;
+      const createBlogApiResponse$: Observable<ICreateBlogSucessfullAPIResponse> = this.blogService.createBlog(formData);
+
+      createBlogApiResponse$.subscribe({
+        next: (res) => {
+          this.isSubmitting = false;
+          this.blogForm.reset();
+          this.tags = [];
+          this.previewUrl = null;
+
+          this.router.navigate(["/myblogs"]);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+
+          if(!err.errorField) return;
+
+          const errObj: IValidationError = err as IValidationError;
+
+          this.blogForm.get(errObj.errorField)?.setErrors({ message: errObj.message });
+
+          this.blogForm.markAllAsTouched();
+        }
+      });
   }
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment'; // acessing environment variables
 
@@ -9,7 +10,6 @@ import { AuthAPIEndPoint } from '../constants/authAPIEndPoint';
 // interfaces
 import { IUserLoginCredentials, IUserRegisterationCredentials } from '../../shared/models/IAuthCredentials';
 import { ILoginSucessfullAPIResponse, IRegisterSucessfullAPIResponse } from '../../shared/models/IAuthAPISucessResponse';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

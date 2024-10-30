@@ -25,6 +25,8 @@ export const errorHandlingInterceptor: HttpInterceptorFn = (req, next) => {
 
       const errObj: any = err.error;
 
+      console.error(errObj.errorCode);
+      
       if(errObj.errorField) {
         return throwError(() => errObj as IValidationError);
       }else if(errObj.type === ErrorType.TOKEN) {

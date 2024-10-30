@@ -14,3 +14,7 @@
 body {
     @apply font-roboto;
 }
+
+body::-webkit-scrollbar {
+    display: none;
+}

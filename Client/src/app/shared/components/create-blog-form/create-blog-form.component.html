@@ -84,7 +84,7 @@
               </div>
               
               <div *ngIf="previewUrl" class="relative">
-                <img [src]="previewUrl" class="max-h-64 w-full h-auto mx-auto rounded-lg" alt="Preview">
+                <img [src]="previewUrl" class="max-h-64 w-full h-auto object-cover object-center mx-auto rounded-lg" alt="Preview">
                 <button
                   type="button"
                   (click)="removeImage()"
@@ -145,12 +145,12 @@
                 type="text"
                 [(ngModel)]="newTag"
                 [ngModelOptions]="{standalone: true}"
-                (keyup.enter)="addTag()"
+                (keydown.enter)="addTag($event)"
                 class="px-3 flex-1 py-2 border border-gray-300 rounded-full text-sm outline-none"
                 placeholder="Add a tag..."
                 >
                 <button
-                    (click)="addTag()"
+                    (click)="addTag($event)"
                     type="button"
                     class="px-4 py-1 bg-slate-800 text-white rounded-full hover:bg-slate-600"
                   >
