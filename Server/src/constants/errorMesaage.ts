@@ -7,4 +7,6 @@ export const ErrorMessage = Object.freeze({
     EMAIL_ALREADY_TAKEN: "Email already taken.",
     USER_NOT_FOUND: "No user with that email.",
     PASSWORD_INCORRECT: "Password incorrect.",
+    NOT_AUTHENTICATED: "Not authenticated.",
+    TOKEN_EXPIRED: "Token expired.",
 });

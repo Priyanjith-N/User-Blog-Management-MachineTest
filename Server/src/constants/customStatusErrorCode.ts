@@ -6,4 +6,7 @@ export const ErrorCode = Object.freeze({
     USERNAME_TAKEN: "400x4 username is in use",
     USER_NOT_FOUND: "404x2 user with that email not found",
     PASSWORD_INCORRECT: "400x5 password incorrect",
+    TOKEN_NOT_FOUND: "404x3 token not found not AUTHENTICATED",
+    TOKEN_PAYLOAD_NOT_VALID: "400x6 token payload not vaild",
+    TOKEN_EXPIRED_NEW_TOKEN_NEEDED: "401x1 token expired new token needed",
 });

@@ -30,4 +30,6 @@ authRouter.route("/register").post(authController.registerUser.bind(authControll
 
 authRouter.route("/login").post(authController.loginUser.bind(authController));
 
+authRouter.route("/isuserauthenticated").post(authController.isUserAuthenticated.bind(authController));
+
 export default authRouter;

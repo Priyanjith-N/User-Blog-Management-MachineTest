@@ -4,4 +4,5 @@ import { IUserLoginCredentials, IUserRegisterationCredentials } from "../../enti
 export default interface IAuthUseCase {
     handelUserRegister(data: IUserRegisterationCredentials): Promise<string | never>;
     handelUserLogin(userLoginCredentials: IUserLoginCredentials): Promise<string | never>;
+    isUserAuthenticated(token: string | undefined): Promise<void | never>;
 }
