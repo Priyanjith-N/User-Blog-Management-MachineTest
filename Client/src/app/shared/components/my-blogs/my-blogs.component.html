@@ -2,11 +2,17 @@
     <div class="w-full px-40">
         <p class="mb-[20px] text-lg font-bold text-start w-full">My Blogs</p>
     </div>
-    <div class="flex justify-start gap-[30px] flex-wrap px-40">
-        @for (blog of displayBlogData; track $index) {
-            <div>
-                <app-blog-card (blogDeletedSucessfully)="deleteBlog($event);" [isMyBlogComponent]="true" [blog]="blog" />
-            </div>
-        }
-    </div>
+    @if(!displayBlogData.length) {
+        <div>
+            <p class="text-center text-sm text-black">You haven't posted yet.</p>
+        </div>
+    }@else {
+        <div class="flex justify-start gap-[30px] flex-wrap px-40">
+            @for (blog of displayBlogData; track $index) {
+                <div>
+                    <app-blog-card (blogDeletedSucessfully)="deleteBlog($event);" [isMyBlogComponent]="true" [blog]="blog" />
+                </div>
+            }
+        </div>
+    }
 </div>
