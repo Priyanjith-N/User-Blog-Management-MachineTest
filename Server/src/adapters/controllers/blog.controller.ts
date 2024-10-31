@@ -109,4 +109,17 @@ export default class BlogController implements IBlogController {
             next(err);
         }
     }
+
+    async getBlogDataById(req: IAuthRequest, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const data: IBlogWithUserDetails = await this.blogUseCase.getBlogDetialsById(req.params.blogId);
+
+            res.status(StatusCodes.Success).json({
+                message: ResponseMessage.SUCESSFULL,
+                data
+            });
+        } catch (err: any) {
+            next(err);
+        }
+    }
 }

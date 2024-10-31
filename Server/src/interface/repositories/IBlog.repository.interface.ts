@@ -8,4 +8,5 @@ export default interface IBlogRepository {
     deleteBlog(blogId: string, userId: string): Promise<void | never>;
     getAllBlogs(): Promise<IBlogWithUserDetails[] | never>;
     getBlogsOfCurrentUser(userId: string): Promise<IBlogWithUserDetails[] | never>;
+    getBlogWithUserDetailsById(blogId: string): Promise<IBlogWithUserDetails | never>;
 }

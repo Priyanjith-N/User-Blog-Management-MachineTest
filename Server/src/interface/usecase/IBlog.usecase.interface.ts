@@ -8,4 +8,5 @@ export default interface IBlogUseCase {
     deleteBlog(blogId: string | undefined, userId: string | undefined): Promise<void | never>;
     getAllBolgs(): Promise<IBlogWithUserDetails[] | never>;
     getAllBolgsOfCurrentUser(userId: string | undefined): Promise<IBlogWithUserDetails[] | never>;
+    getBlogDetialsById(blogId: string | undefined): Promise<IBlogWithUserDetails | never>;
 }

@@ -113,4 +113,38 @@ export default class BlogRepository implements IBlogRepository {
             throw err;
         }
     }
+
+    async getBlogWithUserDetailsById(blogId: string): Promise<IBlogWithUserDetails | never> {
+        try {
+            return (await Blogs.aggregate(
+                [
+                    {
+                        $match: {
+                            _id: new mongoose.Types.ObjectId(blogId)
+                        }
+                    },
+                    {
+                      $lookup: {
+                        from: 'users', 
+                        localField: 'authorId', 
+                        foreignField: '_id', 
+                        as: 'userData'
+                      }
+                    }, 
+                    {
+                      $unwind: {
+                        path: '$userData'
+                      }
+                    },
+                    {
+                        $project: {
+                            "userData.password": 0
+                        }
+                    }
+                  ]
+            ))[0];
+        } catch (err: any) {
+            throw err;
+        }
+    }
 }

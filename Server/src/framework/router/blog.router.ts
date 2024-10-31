@@ -44,4 +44,6 @@ blogRouter.route("/blog/:blogId")
 
 blogRouter.route("/myblogs").get(blogController.getAllBlogsOfCurrentUser.bind(blogController));
 
+blogRouter.route("/blogdetails/:blogId").get(blogController.getBlogDataById.bind(blogController));
+
 export default blogRouter;
