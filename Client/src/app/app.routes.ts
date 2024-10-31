@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
+
+// components
 import { AuthPageComponent } from './features/auth/auth-page/auth-page.component';
 import { LoginFormComponent } from './shared/components/login-form/login-form.component';
 import { RegisterFormComponent } from './shared/components/register-form/register-form.component';
 import { HomePageComponent } from './features/home/home-page/home-page.component';
-import { CreateBlogFormComponent } from './shared/components/create-blog-form/create-blog-form.component';
 import { AddEditBolgFormComponent } from './shared/components/add-edit-bolg-form/add-edit-bolg-form.component';
 
 export const routes: Routes = [
@@ -32,7 +33,7 @@ export const routes: Routes = [
         children: [
             {
                 path: "createblog",
-                component: CreateBlogFormComponent
+                component: AddEditBolgFormComponent
             },
             {
                 path: "editblog/:blogId",
