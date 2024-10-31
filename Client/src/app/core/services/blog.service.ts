@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment'; // acessing env
 import { BlogAPIEndPoint } from '../constants/blogAPIEndPoint';
 
 // interfaces
-import { ICreateBlogSucessfullAPIResponse, IDeleteBlogSucessfullAPIResponse, IEditBlogSucessfullAPIResponse, IGetAllBlogsOfCurrentUserSucessfullAPIResponse, IGetAllBlogsSucessfullAPIResponse, IGetBlogDataByIdSucessfullAPIResponse } from '../../shared/models/IBlogAPISucessResponse';
+import { ICreateBlogSucessfullAPIResponse, IDeleteBlogSucessfullAPIResponse, IEditBlogSucessfullAPIResponse, IGetAllBlogDetailsSucessfullAPIResponse, IGetAllBlogsOfCurrentUserSucessfullAPIResponse, IGetAllBlogsSucessfullAPIResponse, IGetBlogDataByIdSucessfullAPIResponse } from '../../shared/models/IBlogAPISucessResponse';
 
 
 @Injectable({
@@ -65,5 +65,13 @@ export class BlogService {
     const getAllBlogsOfCurrentUserApiResponse$: Observable<IGetAllBlogsOfCurrentUserSucessfullAPIResponse> = this.httpClient.get<IGetAllBlogsOfCurrentUserSucessfullAPIResponse>(api);
 
     return getAllBlogsOfCurrentUserApiResponse$;
+  }
+
+  getBlogDetailsById(blogId: string): Observable<IGetAllBlogDetailsSucessfullAPIResponse> {
+    const api: string = `${this.backendDomain}${BlogAPIEndPoint.GET_BLOG_DETAILS}${blogId}`;
+
+    const getBlogDetailApiResponse$: Observable<IGetAllBlogDetailsSucessfullAPIResponse> = this.httpClient.get<IGetAllBlogDetailsSucessfullAPIResponse>(api);
+
+    return getBlogDetailApiResponse$;
   }
 }
