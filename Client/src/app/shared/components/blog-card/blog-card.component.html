@@ -1,5 +1,5 @@
-<div [routerLink]="['/blog', blog?._id]" class="flex flex-col gap-[18px] max-w-[360px] cursor-pointer p-[10px] border rounded-[6px] relative">
-    <div>
+<div [routerLink]="['/blog', blog?._id]" class="max-w-[360px] cursor-pointer p-[10px] border rounded-[6px] relative">
+    <div class="flex flex-col gap-[18px]">
         <div>
             <img class="w-[360px] h-[270px] object-fill object-center rounded-[6px]" [src]="blog?.image?.url" alt="">
         </div>
