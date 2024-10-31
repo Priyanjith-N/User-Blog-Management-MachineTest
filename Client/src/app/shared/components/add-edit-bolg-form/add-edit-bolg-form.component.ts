@@ -102,7 +102,6 @@ export class AddEditBolgFormComponent {
   private async urlToFile(url: string) {
     const response = await fetch(url);
     const blob = await response.blob();
-    console.log(blob);
     
     const filename: string = this.getDoumentName(url);
 
@@ -241,8 +240,6 @@ export class AddEditBolgFormComponent {
       image: this.blogForm.value.image!,
       tags: this.tags,
     };
-
-    console.log(blogCredentials);
     
 
     const formData: FormData = new FormData();
