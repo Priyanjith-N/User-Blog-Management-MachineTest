@@ -9,6 +9,11 @@ import { AddEditBolgFormComponent } from './shared/components/add-edit-bolg-form
 import { LandingComponent } from './shared/components/landing/landing.component';
 import { MyBlogsComponent } from './shared/components/my-blogs/my-blogs.component';
 import { BlogDetailComponent } from './shared/components/blog-detail/blog-detail.component';
+import { NotFoundPageComponent } from './features/notFound/not-found-page/not-found-page.component';
+
+// guards
+import { authGuard } from './core/guards/auth.guard';
+import { canAcessAuthPageGuard } from './core/guards/can-acess-auth-page.guard';
 
 export const routes: Routes = [
     {
@@ -19,13 +24,16 @@ export const routes: Routes = [
     {
         path: "auth",
         component: AuthPageComponent,
+        canActivate: [canAcessAuthPageGuard],
         children: [
             {
                 path: "login",
+                canActivate: [canAcessAuthPageGuard],
                 component: LoginFormComponent
             },
             {
                 path: "register",
+                canActivate: [canAcessAuthPageGuard],
                 component: RegisterFormComponent
             }
         ]
@@ -33,27 +41,37 @@ export const routes: Routes = [
     {
         path: "",
         component: HomePageComponent,
+        canActivate: [authGuard],
         children: [
             {
                 path: "",
+                canActivate: [authGuard],
                 component: LandingComponent
             },
             {
                 path: "myblogs",
+                canActivate: [authGuard],
                 component: MyBlogsComponent
             },
             {
                 path: "createblog",
+                canActivate: [authGuard],
                 component: AddEditBolgFormComponent
             },
             {
                 path: "editblog/:blogId",
+                canActivate: [authGuard],
                 component: AddEditBolgFormComponent
             },
             {
                 path: "blog/:blogId",
+                canActivate: [authGuard],
                 component: BlogDetailComponent
             }
         ]
+    },
+    {
+        path: "**",
+        component: NotFoundPageComponent
     }
 ];

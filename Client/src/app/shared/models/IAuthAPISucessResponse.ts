@@ -9,3 +9,7 @@ export interface IRegisterSucessfullAPIResponse {
 export interface IIsUserAuthenticatedSucessfullAPIResponse {
     message: string;
 }
+
+export interface ILogoutSucessfullAPIResponse {
+    message: string;
+}

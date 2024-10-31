@@ -9,7 +9,7 @@ import { AuthAPIEndPoint } from '../constants/authAPIEndPoint';
 
 // interfaces
 import { IUserLoginCredentials, IUserRegisterationCredentials } from '../../shared/models/IAuthCredentials';
-import { ILoginSucessfullAPIResponse, IRegisterSucessfullAPIResponse } from '../../shared/models/IAuthAPISucessResponse';
+import { IIsUserAuthenticatedSucessfullAPIResponse, ILoginSucessfullAPIResponse, ILogoutSucessfullAPIResponse, IRegisterSucessfullAPIResponse } from '../../shared/models/IAuthAPISucessResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +33,21 @@ export class AuthService {
     const registerApiResponse$: Observable<IRegisterSucessfullAPIResponse> = this.httpClient.post<IRegisterSucessfullAPIResponse>(api, registerCredentials);
 
     return registerApiResponse$;
+  }
+
+  isUserAuthenticated(): Observable<IIsUserAuthenticatedSucessfullAPIResponse> {
+    const api: string = `${this.backendDomain}${AuthAPIEndPoint.IS_USER_AUTHENTICATED}`;
+
+    const isUserAuthenticatedAPIResponse$: Observable<IIsUserAuthenticatedSucessfullAPIResponse> = this.httpClient.post<IIsUserAuthenticatedSucessfullAPIResponse>(api, {});
+
+    return isUserAuthenticatedAPIResponse$;
+  }
+
+  handelLogout(): Observable<ILogoutSucessfullAPIResponse> {
+    const api: string = `${this.backendDomain}${AuthAPIEndPoint.LOGOUT_API}`;
+
+    const logoutApiResponse$: Observable<ILogoutSucessfullAPIResponse> = this.httpClient.post<ILogoutSucessfullAPIResponse>(api, {});
+
+    return logoutApiResponse$;
   }
 }

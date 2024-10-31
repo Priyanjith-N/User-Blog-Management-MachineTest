@@ -1,4 +1,4 @@
-<div class="flex py-[30px] justify-between items-center px-60">
+<div class="flex py-[30px] justify-between items-center px-[200px]">
     <div routerLink="/" class="flex items-center gap-[8px] cursor-pointer">
         <div>
             <img class="w-[36px] h-auto" src="/logo/logo.svg" alt="">
@@ -24,7 +24,7 @@
             </a>
         </div>
     </div>
-    <div>
+    <div class="flex gap-[24px] items-center">
         <div class="relative">
             <input class="outline-none rounded-[5px] bg-[#F4F4F5] text-sm text-black placeholder:text-[#A1A1AA] py-2 pl-4 pr-9" placeholder="Search" type="text">
             <div class="absolute top-1/2 -translate-y-1/2 right-[10px]">
@@ -33,6 +33,13 @@
                     <path d="M10.5715 10.5716L14 14" stroke="#52525B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
                 </svg>                    
             </div>
+        </div>
+        <div>
+            <button (click)="logOut();" class="cursor-pointer font-medium text-white text-base bg-red-600 py-1 px-3 rounded-[6px]">
+                <div class="flex gap-[12px]">
+                    <p>Logout</p>
+                </div>
+            </button>
         </div>
     </div>
 </div>
