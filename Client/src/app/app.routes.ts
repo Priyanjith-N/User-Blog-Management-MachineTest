@@ -6,6 +6,7 @@ import { LoginFormComponent } from './shared/components/login-form/login-form.co
 import { RegisterFormComponent } from './shared/components/register-form/register-form.component';
 import { HomePageComponent } from './features/home/home-page/home-page.component';
 import { AddEditBolgFormComponent } from './shared/components/add-edit-bolg-form/add-edit-bolg-form.component';
+import { LandingComponent } from './shared/components/landing/landing.component';
 
 export const routes: Routes = [
     {
@@ -31,6 +32,10 @@ export const routes: Routes = [
         path: "",
         component: HomePageComponent,
         children: [
+            {
+                path: "",
+                component: LandingComponent
+            },
             {
                 path: "createblog",
                 component: AddEditBolgFormComponent
