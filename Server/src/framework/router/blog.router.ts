@@ -37,6 +37,7 @@ blogRouter.route("/blog").post(upload.single("image"), blogController.createBlog
 
 blogRouter.route("/blog/:blogId")
 .get(blogController.getBlogData.bind(blogController))
-.put(upload.single("image"), blogController.editBlog.bind(blogController));
+.put(upload.single("image"), blogController.editBlog.bind(blogController))
+.delete(blogController.deleteBlog.bind(blogController));
 
 export default blogRouter;

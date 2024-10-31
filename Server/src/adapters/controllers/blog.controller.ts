@@ -71,4 +71,16 @@ export default class BlogController implements IBlogController {
             next(err);
         }
     }
+
+    async deleteBlog(req: IAuthRequest, res: Response, next: NextFunction): Promise<void> {
+        try {
+            await this.blogUseCase.deleteBlog(req.params.blogId, req.id);
+
+            res.status(StatusCodes.Success).json({
+                message: ResponseMessage.SUCESSFULL
+            });
+        } catch (err: any) {
+            next(err);
+        }
+    }
 }

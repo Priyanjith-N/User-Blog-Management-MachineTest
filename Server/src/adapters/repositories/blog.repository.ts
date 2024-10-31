@@ -31,4 +31,12 @@ export default class BlogRepository implements IBlogRepository {
             throw err;
         }
     }
+
+    async deleteBlog(blogId: string, userId: string): Promise<void | never> {
+        try {
+            await Blogs.deleteOne({ _id: blogId, authorId: userId });
+        } catch (err: any) {
+            throw err;
+        }
+    }
 }

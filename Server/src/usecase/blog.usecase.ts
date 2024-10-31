@@ -113,4 +113,20 @@ export default class BlogUseCase implements IBlogUseCase {
             throw err;
         }
     }
+
+    async deleteBlog(blogId: string | undefined, userId: string | undefined): Promise<void | never> {
+        try {
+            if(!blogId || !isObjectIdOrHexString(blogId) || !userId || !isObjectIdOrHexString(userId)) throw new RequiredCredentialsNotGiven(ErrorMessage.REQUIRED_CREDENTIALS_NOT_GIVEN, ErrorCode.CREDENTIALS_NOT_GIVEN_OR_NOT_FOUND);
+
+            const blogData: IBlog | null = await this.blogRepository.getBlogDataByIdAndUserId(blogId, userId);
+
+            if(!blogData) throw new RequiredCredentialsNotGiven(ErrorMessage.INVAILD_OR_NOT_AUTHER_OF_BLOG, ErrorCode.INVAILD_AUTHOR_OR_NOT_THE_OWNER_OF_BLOG);
+
+            await this.blogRepository.deleteBlog(blogId, userId); // delete the blog
+
+            await deleteImageFromS3(blogData.image.key); // delete the image of that blog
+        } catch (err: any) {
+            throw err;
+        }
+    }
 }
