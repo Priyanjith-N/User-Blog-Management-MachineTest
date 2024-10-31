@@ -1,3 +1,11 @@
+// interfaces
+import IBlog from "./IBlog.entity";
+
 export interface ICreateBlogSucessfullAPIResponse {
     message: string;
+}
+
+export interface IGetBlogDataByIdSucessfullAPIResponse {
+    message: string;
+    data: IBlog;
 }
