@@ -1,11 +1,11 @@
 <div class=" py-10">
     <div class="w-full px-40">
-        <p class="mb-[20px] text-lg font-bold text-start w-full">Latest Post</p>
+        <p class="mb-[20px] text-lg font-bold text-start w-full">My Blogs</p>
     </div>
     <div class="flex justify-start gap-[30px] flex-wrap px-40">
         @for (blog of displayBlogData; track $index) {
             <div>
-                <app-blog-card [isMyBlogComponent]="false" [blog]="blog" />
+                <app-blog-card (blogDeletedSucessfully)="deleteBlog($event);" [isMyBlogComponent]="true" [blog]="blog" />
             </div>
         }
     </div>
