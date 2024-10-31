@@ -137,4 +137,14 @@ export default class BlogUseCase implements IBlogUseCase {
             throw err;
         }
     }
+
+    async getAllBolgsOfCurrentUser(userId: string | undefined): Promise<IBlogWithUserDetails[] | never> {
+        try {
+            if(!userId || !isObjectIdOrHexString(userId)) throw new RequiredCredentialsNotGiven(ErrorMessage.REQUIRED_CREDENTIALS_NOT_GIVEN, ErrorCode.CREDENTIALS_NOT_GIVEN_OR_NOT_FOUND);
+
+            return await this.blogRepository.getBlogsOfCurrentUser(userId);
+        } catch (err: any) {
+            throw err;
+        }
+    }
 }

@@ -6,5 +6,6 @@ export default interface IBlogRepository {
     getBlogDataByIdAndUserId(blogId: string, userId: string): Promise<IBlog | null | never>;
     updateBlogData(blogData: Omit<IBlog, "_id">, userId: string, blogId: string): Promise<void | never>;
     deleteBlog(blogId: string, userId: string): Promise<void | never>;
-    getAllBlogs(): Promise<IBlogWithUserDetails[] | never>
+    getAllBlogs(): Promise<IBlogWithUserDetails[] | never>;
+    getBlogsOfCurrentUser(userId: string): Promise<IBlogWithUserDetails[] | never>;
 }

@@ -96,4 +96,17 @@ export default class BlogController implements IBlogController {
             next(err);
         }
     }
+
+    async getAllBlogsOfCurrentUser(req: IAuthRequest, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const data: IBlogWithUserDetails[] = await this.blogUseCase.getAllBolgsOfCurrentUser(req.id);
+
+            res.status(StatusCodes.Success).json({
+                message: ResponseMessage.SUCESSFULL,
+                data
+            });
+        } catch (err: any) {
+            next(err);
+        }
+    }
 }

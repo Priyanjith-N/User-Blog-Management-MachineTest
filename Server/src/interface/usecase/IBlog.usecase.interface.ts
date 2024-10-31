@@ -7,4 +7,5 @@ export default interface IBlogUseCase {
     handelEditBlog(blogCredentials: IBlogCredentials, blogId: string | undefined, userId: string | undefined): Promise<void | never>;
     deleteBlog(blogId: string | undefined, userId: string | undefined): Promise<void | never>;
     getAllBolgs(): Promise<IBlogWithUserDetails[] | never>;
+    getAllBolgsOfCurrentUser(userId: string | undefined): Promise<IBlogWithUserDetails[] | never>;
 }

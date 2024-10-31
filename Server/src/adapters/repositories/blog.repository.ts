@@ -4,6 +4,7 @@ import Blogs from "../../framework/models/blog.model";
 // interfaces
 import IBlog, { IBlogWithUserDetails } from "../../entity/IBlog.entity";
 import IBlogRepository from "../../interface/repositories/IBlog.repository.interface";
+import mongoose from "mongoose";
 
 export default class BlogRepository implements IBlogRepository {
     async createBlog(blogData: Omit<IBlog, "_id">): Promise<void | never> {
@@ -44,6 +45,45 @@ export default class BlogRepository implements IBlogRepository {
         try {
             return await Blogs.aggregate(
                 [
+                    {
+                      $lookup: {
+                        from: 'users', 
+                        localField: 'authorId', 
+                        foreignField: '_id', 
+                        as: 'userData'
+                      }
+                    }, 
+                    {
+                      $unwind: {
+                        path: '$userData'
+                      }
+                    },
+                    {
+                        $project: {
+                            "userData.password": 0
+                        }
+                    }, 
+                    {
+                      $sort: {
+                        createdAt: -1
+                      }
+                    }
+                  ]
+            );
+        } catch (err: any) {
+            throw err;
+        }
+    }
+
+    async getBlogsOfCurrentUser(userId: string): Promise<IBlogWithUserDetails[] | never> {
+        try {
+            return await Blogs.aggregate(
+                [
+                    {
+                        $match: {
+                            authorId: new mongoose.Types.ObjectId(userId)
+                        }
+                    },
                     {
                       $lookup: {
                         from: 'users', 
