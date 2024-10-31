@@ -10,6 +10,7 @@ import { ResponseMessage } from "../../constants/sucessMessage";
 import IAuthController from "../../interface/controllers/IAuth.controller.interface";
 import { IUserLoginCredentials, IUserRegisterationCredentials } from "../../entity/IUser.entity";
 import IAuthUseCase from "../../interface/usecase/IAuth.usecase.interface";
+import IAuthRequest from "../../interface/common/IAuthRequest.interface";
 
 export default class AuthController implements IAuthController {
     private authUseCase: IAuthUseCase;
@@ -74,6 +75,21 @@ export default class AuthController implements IAuthController {
 
             res.status(StatusCodes.Success).json({
                 message: ResponseMessage.USER_AUTHENTICATED
+            });
+        } catch (err: any) {
+            next(err);
+        }
+    }
+
+    async logoutUser(req: IAuthRequest, res: Response, next: NextFunction): Promise<void> {
+        try {
+            res.clearCookie("token", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production'
+            });
+
+            res.status(StatusCodes.Success).json({
+                message: ResponseMessage.LOGOUT_SUCCESS
             });
         } catch (err: any) {
             next(err);
