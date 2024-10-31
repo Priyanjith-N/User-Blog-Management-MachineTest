@@ -11,4 +11,5 @@ export const ErrorCode = Object.freeze({
     TOKEN_EXPIRED_NEW_TOKEN_NEEDED: "401x1 token expired new token needed",
     MIN_TITLE_NOT_MEET: "400x7 title minimum length does not meet",
     MIN_CONTENT_NOT_MEET: "400x8 content minimum length does not meet",
+    INVAILD_AUTHOR_OR_NOT_THE_OWNER_OF_BLOG: "400X9 user is not the author or invaild credentials given.",
 });

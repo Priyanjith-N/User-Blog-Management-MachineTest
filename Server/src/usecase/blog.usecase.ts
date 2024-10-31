@@ -33,6 +33,10 @@ export default class BlogUseCase implements IBlogUseCase {
                 throw new ValidationError({ statusCode: StatusCodes.BadRequest, errorField: ErrorField.CONTENT, message: ErrorMessage.MIN_CONTENT_LENGTH_NOT_MEET, errorCode: ErrorCode.MIN_CONTENT_NOT_MEET });
             }
 
+            if(!blogCredentials.tags || typeof blogCredentials.tags === "string") {
+                blogCredentials.tags = JSON.parse(blogCredentials.tags || "[]");
+            }
+
             const newBlogData: Omit<IBlog, "_id"> = {
                 title: blogCredentials.title,
                 category: blogCredentials.category,
@@ -41,12 +45,26 @@ export default class BlogUseCase implements IBlogUseCase {
                     key: blogCredentials.image.key,
                     url: blogCredentials.image.location
                 },
-                tags: blogCredentials.tags || [],
+                tags: blogCredentials.tags as string[],
                 authorId: userId,
                 createdAt: new Date(Date.now())
             }
 
             await this.blogRepository.createBlog(newBlogData); // save new blog
+        } catch (err: any) {
+            throw err;
+        }
+    }
+
+    async getBlogData(blogId: string | undefined, userId: string | undefined): Promise<IBlog | never> {
+        try {
+            if(!blogId || !isObjectIdOrHexString(blogId) || !userId || !isObjectIdOrHexString(userId)) throw new RequiredCredentialsNotGiven(ErrorMessage.REQUIRED_CREDENTIALS_NOT_GIVEN, ErrorCode.CREDENTIALS_NOT_GIVEN_OR_NOT_FOUND);
+
+            const blogData: IBlog | null = await this.blogRepository.getBlogDataByIdAndUserId(blogId, userId);
+
+            if(!blogData) throw new RequiredCredentialsNotGiven(ErrorMessage.INVAILD_OR_NOT_AUTHER_OF_BLOG, ErrorCode.INVAILD_AUTHOR_OR_NOT_THE_OWNER_OF_BLOG);
+
+            return blogData;
         } catch (err: any) {
             throw err;
         }

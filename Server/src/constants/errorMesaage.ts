@@ -11,4 +11,5 @@ export const ErrorMessage = Object.freeze({
     TOKEN_EXPIRED: "Token expired.",
     MIN_TITLE_LENGTH_NOT_MEET: "Provide at least 5 characters.",
     MIN_CONTENT_LENGTH_NOT_MEET: "Provide at least 50 characters.",
+    INVAILD_OR_NOT_AUTHER_OF_BLOG: "Either user is not the auther of this blog or invaild credentials.",
 });

@@ -15,4 +15,12 @@ export default class BlogRepository implements IBlogRepository {
             throw err;
         }
     }
+
+    async getBlogDataByIdAndUserId(blogId: string, userId: string): Promise<IBlog | null | never> {
+        try {
+            return await Blogs.findOne({ _id: blogId, authorId: userId });
+        } catch (err: any) {
+            throw err;
+        }
+    }
 }

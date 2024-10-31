@@ -17,5 +17,5 @@ export interface IBlogCredentials {
     category: string | undefined;
     content: string | undefined;
     image: Express.MulterS3.File | undefined;
-    tags: string[] | undefined;
+    tags: string[] | string | undefined;
 }

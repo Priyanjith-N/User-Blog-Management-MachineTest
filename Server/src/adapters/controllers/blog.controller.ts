@@ -9,7 +9,7 @@ import { StatusCodes } from "../../enums/statusCode.enum";
 // interfaces
 import IAuthRequest from "../../interface/common/IAuthRequest.interface";
 import IBlogController from "../../interface/controllers/IBlog.controller.interface";
-import { IBlogCredentials } from "../../entity/IBlog.entity";
+import IBlog, { IBlogCredentials } from "../../entity/IBlog.entity";
 import IBlogUseCase from "../../interface/usecase/IBlog.usecase.interface";
 
 export default class BlogController implements IBlogController {
@@ -33,6 +33,19 @@ export default class BlogController implements IBlogController {
 
             res.status(StatusCodes.Success).json({
                 message: ResponseMessage.SUCESSFULL
+            });
+        } catch (err: any) {
+            next(err);
+        }
+    }
+
+    async getBlogData(req: IAuthRequest, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const data: IBlog = await this.blogUseCase.getBlogData(req.params.blogId, req.id);
+
+            res.status(StatusCodes.Success).json({
+                message: ResponseMessage.SUCESSFULL,
+                data
             });
         } catch (err: any) {
             next(err);
