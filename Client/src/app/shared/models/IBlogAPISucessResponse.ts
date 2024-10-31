@@ -9,3 +9,7 @@ export interface IGetBlogDataByIdSucessfullAPIResponse {
     message: string;
     data: IBlog;
 }
+
+export interface IEditBlogSucessfullAPIResponse {
+    message: string;
+}

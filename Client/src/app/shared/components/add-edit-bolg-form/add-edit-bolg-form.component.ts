@@ -9,7 +9,7 @@ import { BlogService } from '../../../core/services/blog.service';
 // interfaces
 import { IBlogForm } from '../../models/IFormGroup';
 import IBlog, { IBlogCredentials } from '../../models/IBlog.entity';
-import { ICreateBlogSucessfullAPIResponse, IGetBlogDataByIdSucessfullAPIResponse } from '../../models/IBlogAPISucessResponse';
+import { ICreateBlogSucessfullAPIResponse, IEditBlogSucessfullAPIResponse, IGetBlogDataByIdSucessfullAPIResponse } from '../../models/IBlogAPISucessResponse';
 import { IValidationError } from '../../models/IAPIError';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -102,12 +102,44 @@ export class AddEditBolgFormComponent {
   private async urlToFile(url: string) {
     const response = await fetch(url);
     const blob = await response.blob();
+    console.log(blob);
+    
     const filename: string = this.getDoumentName(url);
 
     // Convert blob to File object
-    const file: File = new File([blob], filename, { type: "image/jpeg" });
+    const file: File = new File([blob], filename, { type: this.getContentTypeFromUrl(url)! });
 
     this.handleFile(file);
+  }
+
+  private getContentTypeFromUrl(url: string): string | null {
+    const extension = url.split('.').pop()?.toLowerCase(); // Extract the file extension
+
+    if(!extension) {
+      this.router.navigate(["/myblogs"]);
+      return null;
+    }
+
+    // Map of file extensions to MIME types
+    const typeMap: { [key: string]: string } = {
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        png: "image/png",
+        gif: "image/gif",
+        svg: "image/svg+xml",
+        bmp: "image/bmp",
+        webp: "image/webp",
+    };
+
+    // Return the corresponding content type or null if not found
+    const type = typeMap[extension];
+
+    if(!type) {
+      this.router.navigate(["/myblogs"]);
+      return null;
+    }
+    
+    return type;
   }
 
   private getDoumentName(url: string) {
@@ -143,8 +175,6 @@ export class AddEditBolgFormComponent {
   }
 
   handleFile(file: File): void {
-    console.log(file);
-    
     this.blogForm.get('image')?.setErrors(null);
 
     if (file && file.type.startsWith('image/')) {
@@ -212,6 +242,9 @@ export class AddEditBolgFormComponent {
       tags: this.tags,
     };
 
+    console.log(blogCredentials);
+    
+
     const formData: FormData = new FormData();
 
     formData.append('title', blogCredentials.title);
@@ -221,16 +254,18 @@ export class AddEditBolgFormComponent {
     formData.append('tags', JSON.stringify(blogCredentials.tags));
 
     if(!this.bolgId) {
-      this.createBlog(formData);
+      const createBlogApiResponse$: Observable<ICreateBlogSucessfullAPIResponse> = this.blogService.createBlog(formData);
+
+      this.subscribeObservable(createBlogApiResponse$);
     }else{
-      
+      const editBlogApiResponse$: Observable<IEditBlogSucessfullAPIResponse> = this.blogService.editBlog(formData, this.bolgId!);
+
+      this.subscribeObservable(editBlogApiResponse$);
     }  
   }
 
-  private createBlog(formData: FormData) {
-    const createBlogApiResponse$: Observable<ICreateBlogSucessfullAPIResponse> = this.blogService.createBlog(formData);
-
-    createBlogApiResponse$.subscribe({
+  private subscribeObservable(observable$: Observable<ICreateBlogSucessfullAPIResponse | IEditBlogSucessfullAPIResponse>) {
+    observable$.subscribe({
       next: (res) => {
         this.isSubmitting = false;
         this.blogForm.reset();
