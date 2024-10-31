@@ -1,5 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+
+// componets
 import { BlogCardComponent } from '../blog-card/blog-card.component';
+
+// services
+import { BlogService } from '../../../core/services/blog.service';
+
+// interfaces
+import { IGetAllBlogsSucessfullAPIResponse } from '../../models/IBlogAPISucessResponse';
+import { IBlogWithUserDetails } from '../../models/IBlog.entity';
 
 @Component({
   selector: 'app-landing',
@@ -11,5 +21,24 @@ import { BlogCardComponent } from '../blog-card/blog-card.component';
   styleUrl: './landing.component.css'
 })
 export class LandingComponent {
+  private blogService: BlogService = inject(BlogService);
 
+  private blogData: IBlogWithUserDetails[] = [];
+  displayBlogData: IBlogWithUserDetails[] = [];
+
+  constructor() {
+    this.getData();
+  }
+
+  private getData() {
+    const getAllBlogs$: Observable<IGetAllBlogsSucessfullAPIResponse> = this.blogService.getAllBlogs();
+
+    getAllBlogs$.subscribe({
+      next: (res) => {
+        this.blogData = res.data;
+        this.displayBlogData = this.blogData;
+      },
+      error: (err) => {  }
+    });
+  }
 }

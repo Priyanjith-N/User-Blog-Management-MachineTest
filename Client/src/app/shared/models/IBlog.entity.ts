@@ -1,3 +1,5 @@
+import { IUserProfile } from "./IUser.entity";
+
 export default interface IBlog {
     _id: string;
     title: string;
@@ -18,4 +20,8 @@ export interface IBlogCredentials {
     image: File;
     content: string;
     tags: string[];
+}
+
+export interface IBlogWithUserDetails extends IBlog {
+    userData: IUserProfile;
 }

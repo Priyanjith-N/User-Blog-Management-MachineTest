@@ -1,5 +1,5 @@
 // interfaces
-import IBlog from "./IBlog.entity";
+import IBlog, { IBlogWithUserDetails } from "./IBlog.entity";
 
 export interface ICreateBlogSucessfullAPIResponse {
     message: string;
@@ -16,4 +16,9 @@ export interface IEditBlogSucessfullAPIResponse {
 
 export interface IDeleteBlogSucessfullAPIResponse {
     message: string;
+}
+
+export interface IGetAllBlogsSucessfullAPIResponse {
+    message: string;
+    data: IBlogWithUserDetails[];
 }

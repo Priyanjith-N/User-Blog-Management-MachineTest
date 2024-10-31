@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment'; // acessing env
 import { BlogAPIEndPoint } from '../constants/blogAPIEndPoint';
 
 // interfaces
-import { ICreateBlogSucessfullAPIResponse, IDeleteBlogSucessfullAPIResponse, IEditBlogSucessfullAPIResponse, IGetBlogDataByIdSucessfullAPIResponse } from '../../shared/models/IBlogAPISucessResponse';
+import { ICreateBlogSucessfullAPIResponse, IDeleteBlogSucessfullAPIResponse, IEditBlogSucessfullAPIResponse, IGetAllBlogsSucessfullAPIResponse, IGetBlogDataByIdSucessfullAPIResponse } from '../../shared/models/IBlogAPISucessResponse';
 
 
 @Injectable({
@@ -49,5 +49,13 @@ export class BlogService {
     const deleteBlogByIdApiResponse$: Observable<IDeleteBlogSucessfullAPIResponse> = this.httpClient.delete<IDeleteBlogSucessfullAPIResponse>(api);
 
     return deleteBlogByIdApiResponse$;
+  }
+
+  getAllBlogs(): Observable<IGetAllBlogsSucessfullAPIResponse> {
+    const api: string = `${this.backendDomain}${BlogAPIEndPoint.GET_ALL_BLOGS}`;
+
+    const getAllBlogs$: Observable<IGetAllBlogsSucessfullAPIResponse> = this.httpClient.get<IGetAllBlogsSucessfullAPIResponse>(api);
+
+    return getAllBlogs$;
   }
 }

@@ -1,19 +1,19 @@
-<div class="flex flex-col gap-[18px] max-w-[360px] cursor-pointer p-[10px] border rounded-[6px]">
+<div [routerLink]="['/blog', blog?._id]" class="flex flex-col gap-[18px] max-w-[360px] cursor-pointer p-[10px] border rounded-[6px]">
     <div>
-        <img class="w-[360px] h-[270px] object-cover object-center rounded-[6px]" src="/sample.jpg" alt="">
+        <img class="w-[360px] h-[270px] object-fill object-center rounded-[6px]" [src]="blog?.image?.url" alt="">
     </div>
     <div class="p-[4px]">
         <div class="text-[#4B6BFB] bg-[rgba(75,107,251,0.05)] rounded-[6px] flex items-center py-[4px] px-[10px] text-sm w-fit">
-            Technology
+            {{ blog?.category }}
         </div>
     </div>
     <div class="p-[4px] flex flex-col gap-[20px] pr-[8px]">
         <div>
-            <h2 class="break-words text-3xl font-medium">React Compiler Beta Release</h2>
+            <h2 class="break-words text-3xl font-medium">{{ blog?.title }}</h2>
         </div>
         <div class="flex gap-[15px] text-[#97989F] text-sm">
-            <p>Priyanjith</p>
-            <p>August 20, 2022</p>
+            <p>{{ blog?.userData?.userName }}</p>
+            <p>{{ blog?.createdAt | dateFormater }}</p>
         </div>
     </div>
 </div>
