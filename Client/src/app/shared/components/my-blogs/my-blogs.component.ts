@@ -7,7 +7,7 @@ import { BlogCardComponent } from '../blog-card/blog-card.component';
 import { BlogService } from '../../../core/services/blog.service';
 
 // interfaces
-import { IGetAllBlogsSucessfullAPIResponse } from '../../models/IBlogAPISucessResponse';
+import { IGetAllBlogsOfCurrentUserSucessfullAPIResponse } from '../../models/IBlogAPISucessResponse';
 import { IBlogWithUserDetails } from '../../models/IBlog.entity';
 import { Observable } from 'rxjs';
 
@@ -31,9 +31,9 @@ export class MyBlogsComponent {
   }
 
   private getData() {
-    const getAllBlogs$: Observable<IGetAllBlogsSucessfullAPIResponse> = this.blogService.getAllBlogs();
+    const getAllBlogsOfCurrentUserApiResponse$: Observable<IGetAllBlogsOfCurrentUserSucessfullAPIResponse> = this.blogService.getAllBlogsOfCurrentUser();
 
-    getAllBlogs$.subscribe({
+    getAllBlogsOfCurrentUserApiResponse$.subscribe({
       next: (res) => {
         this.blogData = res.data;
         this.displayBlogData = this.blogData;

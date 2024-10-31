@@ -31,9 +31,9 @@ export class LandingComponent {
   }
 
   private getData() {
-    const getAllBlogs$: Observable<IGetAllBlogsSucessfullAPIResponse> = this.blogService.getAllBlogs();
+    const getAllBlogsApiResponse$: Observable<IGetAllBlogsSucessfullAPIResponse> = this.blogService.getAllBlogs();
 
-    getAllBlogs$.subscribe({
+    getAllBlogsApiResponse$.subscribe({
       next: (res) => {
         this.blogData = res.data;
         this.displayBlogData = this.blogData;

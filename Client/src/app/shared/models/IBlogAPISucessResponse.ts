@@ -22,3 +22,5 @@ export interface IGetAllBlogsSucessfullAPIResponse {
     message: string;
     data: IBlogWithUserDetails[];
 }
+
+export interface IGetAllBlogsOfCurrentUserSucessfullAPIResponse extends IGetAllBlogsSucessfullAPIResponse { }

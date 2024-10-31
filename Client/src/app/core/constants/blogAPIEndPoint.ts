@@ -4,4 +4,5 @@ export const BlogAPIEndPoint = Object.freeze({
     EDIT_BLOG: "/api/blog/",
     DELETE_BLOG: "/api/blog/",
     GET_ALL_BLOGS: "/api/blog",
+    GET_ALL_BLOGS_OF_CURRENT_USER: "/api/myblogs",
 });
