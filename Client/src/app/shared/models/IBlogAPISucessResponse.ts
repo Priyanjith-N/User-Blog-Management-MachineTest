@@ -13,3 +13,7 @@ export interface IGetBlogDataByIdSucessfullAPIResponse {
 export interface IEditBlogSucessfullAPIResponse {
     message: string;
 }
+
+export interface IDeleteBlogSucessfullAPIResponse {
+    message: string;
+}
