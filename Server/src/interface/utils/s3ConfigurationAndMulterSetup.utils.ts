@@ -1,4 +1,4 @@
-import { S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import multer, { MulterError } from "multer";
 import multerS3 from "multer-s3";
 
@@ -31,5 +31,19 @@ const upload = multer({
         }
     },
 });
+
+export async function deleteImageFromS3(key: string) {
+    try {
+        const deleteCommand = new DeleteObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME || "",
+            Key: key,
+        });
+
+        const data = await s3.send(deleteCommand);
+        return true;
+    } catch (error) {
+        return false;
+    }
+};
 
 export default upload;

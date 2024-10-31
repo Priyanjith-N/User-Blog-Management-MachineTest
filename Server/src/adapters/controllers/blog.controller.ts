@@ -51,4 +51,24 @@ export default class BlogController implements IBlogController {
             next(err);
         }
     }
+
+    async editBlog(req: IAuthRequest, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const editBlogCredentials: IBlogCredentials = {
+                title: req.body.title,
+                category: req.body.category,
+                content: req.body.content,
+                image: req.file as Express.MulterS3.File,
+                tags: req.body.tags,
+            }
+            
+            await this.blogUseCase.handelEditBlog(editBlogCredentials, req.params.blogId, req.id);
+
+            res.status(StatusCodes.Success).json({
+                message: ResponseMessage.SUCESSFULL
+            });
+        } catch (err: any) {
+            next(err);
+        }
+    }
 }

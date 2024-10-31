@@ -15,6 +15,7 @@ import IBlog, { IBlogCredentials } from "../entity/IBlog.entity";
 import IBlogUseCase from "../interface/usecase/IBlog.usecase.interface";
 import { isObjectIdOrHexString } from "mongoose";
 import IBlogRepository from "../interface/repositories/IBlog.repository.interface";
+import { deleteImageFromS3 } from "../interface/utils/s3ConfigurationAndMulterSetup.utils";
 
 export default class BlogUseCase implements IBlogUseCase {
     private blogRepository: IBlogRepository;
@@ -65,6 +66,49 @@ export default class BlogUseCase implements IBlogUseCase {
             if(!blogData) throw new RequiredCredentialsNotGiven(ErrorMessage.INVAILD_OR_NOT_AUTHER_OF_BLOG, ErrorCode.INVAILD_AUTHOR_OR_NOT_THE_OWNER_OF_BLOG);
 
             return blogData;
+        } catch (err: any) {
+            throw err;
+        }
+    }
+
+    async handelEditBlog(blogCredentials: IBlogCredentials, blogId: string | undefined, userId: string | undefined): Promise<void | never> {
+        try {
+            if(!blogCredentials.title || !blogCredentials.category || !blogCredentials.content || !blogCredentials.image || !userId || !isObjectIdOrHexString(userId) || !blogId || !isObjectIdOrHexString(blogId)) throw new RequiredCredentialsNotGiven(ErrorMessage.REQUIRED_CREDENTIALS_NOT_GIVEN, ErrorCode.CREDENTIALS_NOT_GIVEN_OR_NOT_FOUND);
+
+            if(blogCredentials.title.length < 5) {
+                throw new ValidationError({ statusCode: StatusCodes.BadRequest, errorField: ErrorField.TITLE, message: ErrorMessage.MIN_TITLE_LENGTH_NOT_MEET, errorCode: ErrorCode.MIN_TITLE_NOT_MEET });
+            }else if(blogCredentials.content.length < 50) {
+                throw new ValidationError({ statusCode: StatusCodes.BadRequest, errorField: ErrorField.CONTENT, message: ErrorMessage.MIN_CONTENT_LENGTH_NOT_MEET, errorCode: ErrorCode.MIN_CONTENT_NOT_MEET });
+            }
+
+            if(!blogCredentials.tags || typeof blogCredentials.tags === "string") {
+                blogCredentials.tags = JSON.parse(blogCredentials.tags || "[]");
+            }
+
+            const blogData: IBlog | null = await this.blogRepository.getBlogDataByIdAndUserId(blogId, userId);
+
+            if(!blogData) {
+                await deleteImageFromS3(blogCredentials.image.key); // delete newly uploaded image
+
+                throw new RequiredCredentialsNotGiven(ErrorMessage.INVAILD_OR_NOT_AUTHER_OF_BLOG, ErrorCode.INVAILD_AUTHOR_OR_NOT_THE_OWNER_OF_BLOG);
+            }
+
+            const newBlogData: Omit<IBlog, "_id"> = {
+                title: blogCredentials.title,
+                category: blogCredentials.category,
+                content: blogCredentials.content,
+                image: {
+                    key: blogCredentials.image.key,
+                    url: blogCredentials.image.location
+                },
+                tags: blogCredentials.tags as string[],
+                authorId: userId,
+                createdAt: new Date(blogData.createdAt)
+            }
+
+            await this.blogRepository.updateBlogData(newBlogData, userId, blogId); // update the blog with new data
+
+            await deleteImageFromS3(blogData.image.key); // delete newly uploaded image
         } catch (err: any) {
             throw err;
         }

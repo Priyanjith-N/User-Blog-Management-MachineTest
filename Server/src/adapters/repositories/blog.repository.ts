@@ -23,4 +23,12 @@ export default class BlogRepository implements IBlogRepository {
             throw err;
         }
     }
+
+    async updateBlogData(blogData: Omit<IBlog, "_id">, userId: string, blogId: string): Promise<void | never> {
+        try {
+            await Blogs.updateOne({ _id: blogId, authorId: userId }, { $set: blogData });
+        } catch (err: any) {
+            throw err;
+        }
+    }
 }
