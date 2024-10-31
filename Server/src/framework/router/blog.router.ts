@@ -33,7 +33,9 @@ const blogController: IBlogController = new BlogController(blogUseCase);
 
 blogRouter.use(authMiddleware.isAuthenticate.bind(authMiddleware));
 
-blogRouter.route("/blog").post(upload.single("image"), blogController.createBlog.bind(blogController));
+blogRouter.route("/blog")
+.get(blogController.getAllBlogs.bind(blogController))
+.post(upload.single("image"), blogController.createBlog.bind(blogController));
 
 blogRouter.route("/blog/:blogId")
 .get(blogController.getBlogData.bind(blogController))

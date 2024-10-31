@@ -8,4 +8,5 @@ export default interface IBlogController {
     getBlogData(req: IAuthRequest, res: Response, next: NextFunction): Promise<void>;
     editBlog(req: IAuthRequest, res: Response, next: NextFunction): Promise<void>;
     deleteBlog(req: IAuthRequest, res: Response, next: NextFunction): Promise<void>;
+    getAllBlogs(req: IAuthRequest, res: Response, next: NextFunction): Promise<void>;
 }

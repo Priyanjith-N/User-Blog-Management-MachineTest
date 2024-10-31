@@ -11,7 +11,7 @@ import { ErrorField } from "../constants/errorField";
 import { StatusCodes } from "../enums/statusCode.enum";
 
 // interfaces
-import IBlog, { IBlogCredentials } from "../entity/IBlog.entity";
+import IBlog, { IBlogCredentials, IBlogWithUserDetails } from "../entity/IBlog.entity";
 import IBlogUseCase from "../interface/usecase/IBlog.usecase.interface";
 import { isObjectIdOrHexString } from "mongoose";
 import IBlogRepository from "../interface/repositories/IBlog.repository.interface";
@@ -125,6 +125,14 @@ export default class BlogUseCase implements IBlogUseCase {
             await this.blogRepository.deleteBlog(blogId, userId); // delete the blog
 
             await deleteImageFromS3(blogData.image.key); // delete the image of that blog
+        } catch (err: any) {
+            throw err;
+        }
+    }
+
+    async getAllBolgs(): Promise<IBlogWithUserDetails[] | never> {
+        try {
+            return await this.blogRepository.getAllBlogs();
         } catch (err: any) {
             throw err;
         }

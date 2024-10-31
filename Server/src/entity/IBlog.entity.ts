@@ -1,3 +1,6 @@
+// interfaces
+import { IUserProfile } from "./IUser.entity";
+
 export default interface IBlog {
     _id: string;
     title: string;
@@ -18,4 +21,8 @@ export interface IBlogCredentials {
     content: string | undefined;
     image: Express.MulterS3.File | undefined;
     tags: string[] | string | undefined;
+}
+
+export interface IBlogWithUserDetails extends IBlog {
+    userData: IUserProfile;
 }

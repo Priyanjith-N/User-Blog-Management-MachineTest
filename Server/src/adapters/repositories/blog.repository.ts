@@ -2,7 +2,7 @@
 import Blogs from "../../framework/models/blog.model";
 
 // interfaces
-import IBlog from "../../entity/IBlog.entity";
+import IBlog, { IBlogWithUserDetails } from "../../entity/IBlog.entity";
 import IBlogRepository from "../../interface/repositories/IBlog.repository.interface";
 
 export default class BlogRepository implements IBlogRepository {
@@ -35,6 +35,40 @@ export default class BlogRepository implements IBlogRepository {
     async deleteBlog(blogId: string, userId: string): Promise<void | never> {
         try {
             await Blogs.deleteOne({ _id: blogId, authorId: userId });
+        } catch (err: any) {
+            throw err;
+        }
+    }
+
+    async getAllBlogs(): Promise<IBlogWithUserDetails[] | never> {
+        try {
+            return await Blogs.aggregate(
+                [
+                    {
+                      $lookup: {
+                        from: 'users', 
+                        localField: 'authorId', 
+                        foreignField: '_id', 
+                        as: 'userData'
+                      }
+                    }, 
+                    {
+                      $unwind: {
+                        path: '$userData'
+                      }
+                    },
+                    {
+                        $project: {
+                            "userData.password": 0
+                        }
+                    }, 
+                    {
+                      $sort: {
+                        createdAt: -1
+                      }
+                    }
+                  ]
+            );
         } catch (err: any) {
             throw err;
         }
